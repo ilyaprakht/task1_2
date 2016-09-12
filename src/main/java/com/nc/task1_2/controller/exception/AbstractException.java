@@ -17,7 +17,7 @@ public abstract class AbstractException extends Exception {
      * @param message - сообщение об ошибке
      * @param file - файл
      */
-    public AbstractException(String message, File file) {
+    AbstractException(String message, File file) {
         super(message);
         this.file = file;
     }

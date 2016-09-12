@@ -1,6 +1,10 @@
 package com.nc.task1_2.model;
 
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ilpr0816 on 17.08.2016.
@@ -8,31 +12,26 @@ import java.io.File;
  */
 public class Path {
     /**
-     * Название файла
+     * Путь к файлу в виде массива
      */
-    private String fileName;
-
-    /**
-     * Путь к родительской папке
-     */
-    private Path parentPath;
+    private List<String> fullPath;
 
     /**
      * Конструктор
      * @param filePath - путь к файлу
      */
     public Path(String filePath) {
-        // Определяем позицию последнего разделителя в пути
-        int lastSeparatorPos = filePath.lastIndexOf(File.pathSeparator);
+        // Заполняем полный путь
+        fullPath = new ArrayList<>(Arrays.asList(filePath.split(File.pathSeparator)));
+    }
 
-        // Парсим имя файла и путь к родительскому каталогу
-        if (lastSeparatorPos != -1) { // Если разделитель есть в пути
-            fileName = filePath.substring(lastSeparatorPos + 1);
-            parentPath = new Path(filePath.substring(0, lastSeparatorPos));
-        } else { // Если разделителя нет в пути - корневой каталог
-            fileName = filePath;
-            parentPath = null;
-        }
+    /**
+     * Конструктор
+     * @param fullPath - путь к файлу
+     */
+    public Path(List<String> fullPath) {
+        // Заполняем полный путь
+        this.fullPath = fullPath;
     }
 
     /**
@@ -40,14 +39,19 @@ public class Path {
      * @return полный путь к файлу в виде строки
      */
     public String getFullPath() {
-        // Инициализируем путь как имя файла
-        String fullPath = fileName;
+        // Инициализируем путь
+        String path = "";
 
-        // Проверяем путь к родительскому каталогу
-        if (parentPath != null) { // Если путь к родительскому каталогу задан, то добавляем его в полный путь
-            fullPath = parentPath.getFullPath() + File.pathSeparator + fullPath;
+        // Заполняем путь
+        for (String file : fullPath) {
+            if (path.length() == 0) {
+                path = file;
+            } else {
+                path = path + File.pathSeparator + file;
+            }
         }
-        return fullPath;
+
+        return path;
     }
 
     /**
@@ -55,14 +59,33 @@ public class Path {
      * @return имя файла
      */
     public String getFileName() {
-        return fileName;
+        // Возвращаем последний элемент пути
+        return fullPath.get(fullPath.size() - 1);
     }
 
     /**
      * Геттер для пути к родительскому каталогу
      * @return путь к родительскому каталогу
      */
-    public Path getParentPath() {
-        return parentPath;
+    public String getParentPath() {
+        // Инициализируем путь
+        String path = "";
+
+        // Если файл единственный в пути (корневая папка) , то возвращаем null
+        if (fullPath.size() == 1) {
+            return null;
+        }
+
+        // Заполняем путь
+        for (String file : fullPath.subList(0, fullPath.size() - 2)) {
+            if (path.length() == 0) {
+                path = file;
+            } else {
+                path = path + File.pathSeparator + file;
+            }
+        }
+
+        return path;
     }
+
 }

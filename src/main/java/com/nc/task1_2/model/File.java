@@ -4,41 +4,73 @@ package com.nc.task1_2.model;
  * Created by ilpr0816 on 17.08.2016.
  * Сущность файла
  */
-public class File {
+public class File implements Cloneable{
     /**
-     * Название файла
+     * Путь к файлу
      */
-    private Path path;
+    private String fileName;
+
+    /**
+     * Родительский каталог
+     */
+    private Folder parentFolder;
 
     /**
      * Конструктор
-     * @param path - экземпляр Path - путь к файлу
+     * @param fileName - строка пути к файлу
      */
-    public File(Path path) {
-        this.path = path;
+    public File(String fileName) {
+        this.fileName = fileName;
+        parentFolder = null;
     }
 
     /**
      * Конструктор
-     * @param filePath - строка пути к файлу
+     * @param fileName - строка пути к файлу
      */
-    public File (String filePath) {
-        path = new Path(filePath);
+    public File (String fileName, Folder parentFolder) {
+        this.fileName = fileName;
+        this.parentFolder = parentFolder;
     }
 
     /**
-     * Геттер для пути
-     * @return экземпляр Path пути к файлу
+     * Геттер для имени файла
+     * @return имя файла
      */
-    public Path getPath() {
-        return path;
+    public String getFileName() {
+        return fileName;
     }
 
     /**
-     * Получить полный путь к файлу
-     * @return полный путь к файлу в виде строки
+     * Геттер для родительского каталога
+     * @return родительский каталог
+     */
+    public Folder getParentFolder() {
+        return parentFolder;
+    }
+
+    /**
+     * Сеттер для родительского каталога
+     * @param parentFolder - родительский каталог
+     */
+    protected void setParentFolder(Folder parentFolder) {
+        this.parentFolder = parentFolder;
+    }
+
+    /**
+     * Получение полного пути к файлу
+     * @return полный путь к файлу
      */
     public String getFullPath() {
-        return path.getFullPath();
+        if (parentFolder == null) { // Корневой раздел в выборке
+            return fileName;
+        } else { // Не корневой раздел
+            return parentFolder.getFullPath() + java.io.File.pathSeparator + fileName;
+        }
+    }
+
+    @Override
+    public File clone() {
+        return new File(getFileName(), getParentFolder());
     }
 }
