@@ -95,7 +95,7 @@ public class VirtualFileSystem {
      * @return - результирующая строка
      */
     private String printAllRec(File file, String prefix) {
-        String result = prefix + file.getFullPath() + "\\n";
+        String result = prefix + file.getFullPath() + "\n";
         if (file instanceof Folder) {
             for (File childFile : ((Folder) file).getListChildFiles()) {
                 result += printAllRec(childFile, prefix + " ");

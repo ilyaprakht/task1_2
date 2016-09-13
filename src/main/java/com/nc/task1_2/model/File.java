@@ -70,7 +70,7 @@ public class File implements Cloneable{
         if (parentFolder == null) { // Корневой раздел в выборке
             return fileName;
         } else { // Не корневой раздел
-            return parentFolder.getFullPath() + java.io.File.pathSeparator + fileName;
+            return parentFolder.getFullPath() + java.io.File.separator + fileName;
         }
     }
 

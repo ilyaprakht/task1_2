@@ -161,7 +161,7 @@ public class FSFileDAOImpl implements FileDAO {
         // Определяем файл в ФС
         java.io.File hFile = new java.io.File(path.getFullPath());
         // Рекурсивно сканируем все файлы и подпапки, возвращаем результат
-        return scanFilesRec(hFile);
+        return scanFilesRec(hFile, true);
     }
 
     /**
@@ -169,16 +169,16 @@ public class FSFileDAOImpl implements FileDAO {
      * @param hFile - файл
      * @return - экземпляр класса File
      */
-    private File scanFilesRec(java.io.File hFile) throws FileSystemException {
+    private File scanFilesRec(java.io.File hFile, boolean isHead) throws FileSystemException {
         if (hFile.exists()) { // Проверяем что такой файл есть в ФС
             if (hFile.isDirectory()) { // Если это директория, то рекурсивно пробегаемся по всем ее файлам и поддиректориям
-                Folder sFile = new Folder(hFile.getAbsolutePath());
+                Folder sFile = new Folder(isHead ? hFile.getAbsolutePath() : hFile.getName());
                 for (java.io.File childFile : hFile.listFiles()) { // рекурсивно пробегаемся по всем ее файлам и поддиректориям, добавляем в лист
-                    sFile.addChildFile(scanFilesRec(childFile));
+                    sFile.addChildFile(scanFilesRec(childFile, false));
                 }
                 return sFile;
             } else { // Если это файл, то возвращаем его
-                File sFile = new File(hFile.getAbsolutePath());
+                File sFile = new File(isHead ? hFile.getAbsolutePath() : hFile.getName());
                 return sFile;
             }
         } else {

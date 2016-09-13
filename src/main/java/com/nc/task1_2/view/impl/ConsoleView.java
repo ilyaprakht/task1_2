@@ -173,7 +173,7 @@ public class ConsoleView implements View {
             // Инициализируем параметры в зависимости от типа команды
             switch (commandType) {
                 case COMMAND_SCAN:
-                    return new Task(TaskType.SCAN);
+                    return new Task(TaskType.SCAN, commandSplit[1]);
                 case COMMAND_MOVE:
                     return new Task(TaskType.MOVE, commandSplit[1], commandSplit[2]);
                 case COMMAND_COPY:

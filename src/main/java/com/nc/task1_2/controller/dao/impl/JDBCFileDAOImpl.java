@@ -68,7 +68,7 @@ public class JDBCFileDAOImpl implements FileDAO {
             url = property.getProperty(PROPERTIES_URL);
             user = property.getProperty(PROPERTIES_USER);
             password = property.getProperty(PROPERTIES_PASSWORD);
-            timeout = Integer.getInteger(property.getProperty(PROPERTIES_TIMEOUT));
+            timeout = Integer.parseInt(property.getProperty(PROPERTIES_TIMEOUT));
 
         } catch (IOException e) {
             throw new DataBaseException(e.getMessage(), null);
@@ -162,7 +162,6 @@ public class JDBCFileDAOImpl implements FileDAO {
         } else {
             query = "insert into t_file (name" + (file.getParentFolder() != null ? ", link_folder": "") + ") values ('"
                     + replaceS(file.getFileName()) + "'" + (file.getParentFolder() != null ? ", " + file.getParentFolder().getId() : "") + ")";
-            execute(query);
         }
         execute(query);
 
@@ -171,7 +170,7 @@ public class JDBCFileDAOImpl implements FileDAO {
 
         try {
             if (resultSet.next()) {
-                file.setId(resultSet.getInt("id"));
+                file.setId(resultSet.getInt(1));
             }
         }
         catch (SQLException e) {

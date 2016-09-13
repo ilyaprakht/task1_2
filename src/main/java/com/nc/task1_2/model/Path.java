@@ -22,7 +22,7 @@ public class Path {
      */
     public Path(String filePath) {
         // Заполняем полный путь
-        fullPath = new ArrayList<>(Arrays.asList(filePath.split(File.pathSeparator)));
+        fullPath = new ArrayList<>(Arrays.asList(filePath.split(File.separator.equals("\\") ? "\\\\" : File.separator)));
     }
 
     /**
@@ -38,7 +38,7 @@ public class Path {
             if (path.length() == 0) {
                 path = file;
             } else {
-                path = path + File.pathSeparator + file;
+                path = path + File.separator + file;
             }
         }
 
@@ -68,11 +68,11 @@ public class Path {
         }
 
         // Заполняем путь
-        for (String file : fullPath.subList(0, fullPath.size() - 2)) {
+        for (String file : fullPath.subList(0, fullPath.size() - 1)) {
             if (path.length() == 0) {
                 path = file;
             } else {
-                path = path + File.pathSeparator + file;
+                path = path + File.separator + file;
             }
         }
 
