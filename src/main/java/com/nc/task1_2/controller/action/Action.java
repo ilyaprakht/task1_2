@@ -2,7 +2,7 @@ package com.nc.task1_2.controller.action;
 
 import com.nc.task1_2.controller.ViewObservable;
 import com.nc.task1_2.controller.dao.FileDAO;
-import com.nc.task1_2.controller.exception.AbstractException;
+import com.nc.task1_2.controller.exception.BaseException;
 import com.nc.task1_2.controller.exception.ControllerException;
 import com.nc.task1_2.controller.task.Task;
 
@@ -18,5 +18,5 @@ public interface Action {
      * @param fsDAO - доа доступа к ФС
      * @param observable - нотификатор слушателя
      */
-    void doAction(Task task, FileDAO dbDAO, FileDAO fsDAO, ViewObservable observable) throws AbstractException, ControllerException;
+    void doAction(Task task, FileDAO dbDAO, FileDAO fsDAO, ViewObservable observable) throws BaseException, ControllerException;
 }

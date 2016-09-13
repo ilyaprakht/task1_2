@@ -6,7 +6,7 @@ import com.nc.task1_2.model.File;
  * Created by ilpr0816 on 18.08.2016.
  * Абстрактный класс исключения
  */
-public abstract class AbstractException extends Exception {
+public class BaseException extends Exception {
     /**
      * Файл
      */
@@ -17,7 +17,7 @@ public abstract class AbstractException extends Exception {
      * @param message - сообщение об ошибке
      * @param file - файл
      */
-    AbstractException(String message, File file) {
+    protected BaseException(String message, File file) {
         super(message);
         this.file = file;
     }

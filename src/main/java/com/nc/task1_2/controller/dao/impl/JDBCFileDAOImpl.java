@@ -3,7 +3,7 @@ package com.nc.task1_2.controller.dao.impl;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import com.nc.task1_2.controller.dao.FileDAO;
-import com.nc.task1_2.controller.exception.DataBaseException;
+import com.nc.task1_2.controller.exception.DataBaseExceptionException;
 import com.nc.task1_2.model.File;
 import com.nc.task1_2.model.Folder;
 import com.nc.task1_2.model.Path;
@@ -57,7 +57,7 @@ public class JDBCFileDAOImpl implements FileDAO {
     /**
      * Инициализация параметров из проперти-файла
      */
-    private void initParams() throws DataBaseException {
+    private void initParams() throws DataBaseExceptionException {
         FileInputStream fis;
         Properties property = new Properties();
 
@@ -71,7 +71,7 @@ public class JDBCFileDAOImpl implements FileDAO {
             timeout = Integer.parseInt(property.getProperty(PROPERTIES_TIMEOUT));
 
         } catch (IOException e) {
-            throw new DataBaseException(e.getMessage(), null);
+            throw new DataBaseExceptionException(e.getMessage(), null);
         }
     }
 
@@ -79,7 +79,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * Возвращает statement, делает реконнект, если коннекш потерян
      * @return statement
      */
-    private Statement getStatement() throws SQLException, DataBaseException {
+    private Statement getStatement() throws SQLException, DataBaseExceptionException {
         // Проверяем, что коннекш активен
         if (connection == null || !connection.isValid(timeout)) {// Если не активен, то подключаемся заново
             initParams(); // Инициализируем параметры подключения из файла properties
@@ -94,13 +94,13 @@ public class JDBCFileDAOImpl implements FileDAO {
      * @param query - запрос
      * @return - значение в виде ResultSet
      */
-    private ResultSet executeQuery(String query) throws DataBaseException {
+    private ResultSet executeQuery(String query) throws DataBaseExceptionException {
         ResultSet resultSet;
         try {
             resultSet = getStatement().executeQuery(query);
         }
         catch (SQLException e) {
-            throw new DataBaseException(e.getMessage(), null);
+            throw new DataBaseExceptionException(e.getMessage(), null);
         }
         return resultSet;
     }
@@ -109,12 +109,12 @@ public class JDBCFileDAOImpl implements FileDAO {
      * Выполняет запрос, не подразумевающий возвращаемое значение
      * @param query - запрос
      */
-    private void execute(String query) throws DataBaseException {
+    private void execute(String query) throws DataBaseExceptionException {
         try {
             getStatement().execute(query);
         }
         catch (SQLException e) {
-            throw new DataBaseException(e.getMessage(), null);
+            throw new DataBaseExceptionException(e.getMessage(), null);
         }
     }
 
@@ -132,7 +132,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * @param file - экземпляр класса File
      */
     @Override
-    public void create(File file) throws DataBaseException {
+    public void create(File file) throws DataBaseExceptionException {
         createFilesRec(file);
     }
 
@@ -140,7 +140,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * Рекурсивное создание файлов
      * @param file - файл
      */
-    private void createFilesRec(File file) throws DataBaseException {
+    private void createFilesRec(File file) throws DataBaseExceptionException {
         createFile(file);
         if (file instanceof Folder) {
             for (File childFile : ((Folder) file).getListChildFiles()) {
@@ -153,7 +153,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * Создание конкретного файла уже в БД
      * @param file - файл
      */
-    private void createFile(File file) throws DataBaseException {
+    private void createFile(File file) throws DataBaseExceptionException {
         String query;
         if (file instanceof Folder) {
             query = "insert into t_folder (name" + (file.getParentFolder() != null ? ", link_folder": "") + ") values ('"
@@ -174,7 +174,7 @@ public class JDBCFileDAOImpl implements FileDAO {
             }
         }
         catch (SQLException e) {
-            throw new DataBaseException(e.getMessage(), file);
+            throw new DataBaseExceptionException(e.getMessage(), file);
         }
     }
 
@@ -183,7 +183,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * @param file - экземпляр класса File
      */
     @Override
-    public void delete(File file) throws DataBaseException {
+    public void delete(File file) throws DataBaseExceptionException {
         String query;
         if (file instanceof Folder) {
             query = "delete from t_folder where id = " + file.getId();
@@ -199,7 +199,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * @param fileTo   - экземпляр класса File, куда перемещается
      */
     @Override
-    public void move(File fileFrom, File fileTo) throws DataBaseException {
+    public void move(File fileFrom, File fileTo) throws DataBaseExceptionException {
         String query;
         if (fileFrom instanceof Folder) {
             query = "update t_folder set link_folder = " + fileTo.getParentFolder().getId() + " where id = " + fileFrom.getId();
@@ -215,7 +215,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * @param fileTo   - экземпляр класса File, куда копируется
      */
     @Override
-    public void copy(File fileFrom, File fileTo) throws DataBaseException {
+    public void copy(File fileFrom, File fileTo) throws DataBaseExceptionException {
         create(fileTo);
     }
 
@@ -223,7 +223,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * Сбрасывает хранилище
      */
     @Override
-    public void reset() throws DataBaseException {
+    public void reset() throws DataBaseExceptionException {
         // Очищаем таблицу t_folder
         String query = "delete from t_folder";
         execute(query);
@@ -239,7 +239,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * @return true, если файл найден, false, если файл не найден
      */
     @Override
-    public boolean exist(File file) throws DataBaseException {
+    public boolean exist(File file) throws DataBaseExceptionException {
         String query;
         if (file instanceof Folder) {
             query = "select * from t_folder where id = " + file.getId();
@@ -254,7 +254,7 @@ public class JDBCFileDAOImpl implements FileDAO {
             }
         }
         catch (SQLException e) {
-            throw new DataBaseException(e.getMessage(), file);
+            throw new DataBaseExceptionException(e.getMessage(), file);
         }
         return false;
     }
@@ -263,7 +263,7 @@ public class JDBCFileDAOImpl implements FileDAO {
      * Сканирует хранилище, начиная от указанного файла
      * @param path - путь к головному файлу, от которого начнется сканирование хранилища
      */
-    public File scan(Path path) throws DataBaseException {
+    public File scan(Path path) throws DataBaseExceptionException {
         return null; // nothing to do
     }
 

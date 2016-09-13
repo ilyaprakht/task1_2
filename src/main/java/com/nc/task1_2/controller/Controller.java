@@ -4,7 +4,7 @@ import com.nc.task1_2.controller.dao.FileDAO;
 import com.nc.task1_2.controller.event.Event;
 import com.nc.task1_2.controller.event.EventType;
 import com.nc.task1_2.controller.exception.ControllerException;
-import com.nc.task1_2.controller.exception.DataBaseException;
+import com.nc.task1_2.controller.exception.DataBaseExceptionException;
 import com.nc.task1_2.controller.exception.FileSystemException;
 import com.nc.task1_2.controller.task.Task;
 import com.nc.task1_2.controller.task.TaskType;
@@ -73,7 +73,7 @@ public class Controller implements ViewObservable, Runnable {
                 Event event = new Event(EventType.ERROR, task.getTaskType(), "file system error: " + e.getMessage() + " " + (e.getFile() == null ? "" : " " + e.getFile().getFullPath()));
                 notifyObservers(event);
             }
-            catch (DataBaseException e) { // Ошибка БД
+            catch (DataBaseExceptionException e) { // Ошибка БД
                 Event event = new Event(EventType.ERROR, task.getTaskType(), "database error: " + e.getMessage() + " " + (e.getFile() == null ? "" : " " + e.getFile().getFullPath()));
                 notifyObservers(event);
             }

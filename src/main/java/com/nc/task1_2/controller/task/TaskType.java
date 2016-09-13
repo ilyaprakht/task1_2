@@ -4,7 +4,7 @@ import com.nc.task1_2.controller.ViewObservable;
 import com.nc.task1_2.controller.action.Action;
 import com.nc.task1_2.controller.action.impl.*;
 import com.nc.task1_2.controller.dao.FileDAO;
-import com.nc.task1_2.controller.exception.AbstractException;
+import com.nc.task1_2.controller.exception.BaseException;
 import com.nc.task1_2.controller.exception.ControllerException;
 
 /**
@@ -33,7 +33,7 @@ public enum TaskType {
         this.action = action;
     }
 
-    public void make(Task task, FileDAO dbDAO, FileDAO fsDAO, ViewObservable observable) throws ControllerException, AbstractException {
+    public void make(Task task, FileDAO dbDAO, FileDAO fsDAO, ViewObservable observable) throws ControllerException, BaseException {
         try {
             action.newInstance().doAction(task, dbDAO, fsDAO, observable);
         } catch (ReflectiveOperationException e) {

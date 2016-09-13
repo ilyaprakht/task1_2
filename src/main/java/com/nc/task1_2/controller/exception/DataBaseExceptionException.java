@@ -6,13 +6,13 @@ import com.nc.task1_2.model.File;
  * Created by ilpr0816 on 17.08.2016.
  * Исключение для действий на стороне БД
  */
-public class DataBaseException extends AbstractException {
+public class DataBaseExceptionException extends BaseException {
     /**
      * Конструктор для команды над файлом
      * @param message - сообщение об ошибке
      * @param file - файл
      */
-    public DataBaseException(String message, File file) {
+    public DataBaseExceptionException(String message, File file) {
         super(message, file);
     }
 }
