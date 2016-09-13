@@ -26,15 +26,6 @@ public class Path {
     }
 
     /**
-     * Конструктор
-     * @param fullPath - путь к файлу
-     */
-    public Path(List<String> fullPath) {
-        // Заполняем полный путь
-        this.fullPath = fullPath;
-    }
-
-    /**
      * Получить полный путь к файлу
      * @return полный путь к файлу в виде строки
      */

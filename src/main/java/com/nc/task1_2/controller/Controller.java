@@ -1,5 +1,6 @@
 package com.nc.task1_2.controller;
 
+import com.nc.task1_2.controller.dao.FileDAO;
 import com.nc.task1_2.controller.event.Event;
 import com.nc.task1_2.controller.event.EventType;
 import com.nc.task1_2.controller.exception.ControllerException;
@@ -23,11 +24,31 @@ public class Controller implements ViewObservable, Runnable {
      */
     private View view;
 
+    /**
+     * ДАО доступа к БД
+     */
+    private FileDAO dbDAO;
+
+    /**
+     * ДАО доступа в ФС
+     */
+    private FileDAO fsDAO;
+
+    /**
+     * Список слушателей
+     */
     private List<ViewObserver> listObservers;
 
-    public Controller(View view) {
-        // Определяем view как основное представление, от которого будем получать команды
+    /**
+     * Конструктор
+     * @param view - представление
+     * @param dbDAO - дао дсотупа к БД
+     * @param fsDAO - дао доступа к ФС
+     */
+    public Controller(View view, FileDAO dbDAO, FileDAO fsDAO) {
         this.view = view;
+        this.dbDAO = dbDAO;
+        this.fsDAO = fsDAO;
 
         // Добавляем view к числу слушателей событий
         addObserver(this.view);
@@ -46,8 +67,7 @@ public class Controller implements ViewObservable, Runnable {
             task = view.read();
 
             try {
-                Event event = task.getTaskType().make(task);
-                notifyObservers(event);
+                task.getTaskType().make(task, dbDAO, fsDAO, this);
             }
             catch (FileSystemException e) { //Ошибка файловой системы
                 Event event = new Event(EventType.ERROR, task.getTaskType(), "file system error: " + e.getMessage() + " " + (e.getFile() == null ? "" : " " + e.getFile().getFullPath()));

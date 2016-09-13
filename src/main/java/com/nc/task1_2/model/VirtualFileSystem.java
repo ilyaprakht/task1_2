@@ -24,6 +24,10 @@ public class VirtualFileSystem {
         this.headFile = null;
     }
 
+    /**
+     * Получение синглтон инстанса
+     * @return синглтон инстанс
+     */
     public static VirtualFileSystem getInstance() {
         if (virtualFileSystem == null) {
             virtualFileSystem = new VirtualFileSystem();

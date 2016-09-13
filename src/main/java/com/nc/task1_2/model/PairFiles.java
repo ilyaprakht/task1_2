@@ -8,19 +8,19 @@ public class PairFiles {
     /**
      * Файл 1, из которого выполняется операция
      */
-    File fileFrom;
+    private File fileFrom;
 
     /**
      * Файл 2, в который выполняется операция
      */
-    File fileTo;
+    private File fileTo;
 
     /**
      * Конструктор
      * @param fileFrom - файл, откуда выполняется операция
      * @param fileTo - файл, куда выполняется операция
      */
-    public PairFiles(File fileFrom, File fileTo) {
+    PairFiles(File fileFrom, File fileTo) {
         this.fileFrom = fileFrom;
         this.fileTo = fileTo;
     }

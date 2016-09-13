@@ -1,6 +1,9 @@
 package com.nc.task1_2.controller.action;
 
-import com.nc.task1_2.controller.event.Event;
+import com.nc.task1_2.controller.ViewObservable;
+import com.nc.task1_2.controller.dao.FileDAO;
+import com.nc.task1_2.controller.exception.AbstractException;
+import com.nc.task1_2.controller.exception.ControllerException;
 import com.nc.task1_2.controller.task.Task;
 
 /**
@@ -10,7 +13,10 @@ import com.nc.task1_2.controller.task.Task;
 public interface Action {
     /**
      * Выполнение действия
-     * @return Event по результату действия
+     * @param task - задача
+     * @param dbDAO - дао доступа к БД
+     * @param fsDAO - доа доступа к ФС
+     * @param observable - нотификатор слушателя
      */
-    Event doAction(Task task);
+    void doAction(Task task, FileDAO dbDAO, FileDAO fsDAO, ViewObservable observable) throws AbstractException, ControllerException;
 }

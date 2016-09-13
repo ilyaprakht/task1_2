@@ -1,6 +1,5 @@
 package com.nc.task1_2.controller.exception;
 
-import com.nc.task1_2.model.File;
 import com.nc.task1_2.model.Path;
 
 /**
@@ -11,7 +10,7 @@ public class ControllerException extends Exception {
     /**
      * Путь к файлу
      */
-    Path path;
+    private Path path;
 
     /**
      * Конструктор для команды над файлом

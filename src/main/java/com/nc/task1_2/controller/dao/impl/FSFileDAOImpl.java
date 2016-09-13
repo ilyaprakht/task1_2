@@ -164,6 +164,11 @@ public class FSFileDAOImpl implements FileDAO {
         return scanFilesRec(hFile);
     }
 
+    /**
+     * Рекурсивное сканирование файлов
+     * @param hFile - файл
+     * @return - экземпляр класса File
+     */
     private File scanFilesRec(java.io.File hFile) throws FileSystemException {
         if (hFile.exists()) { // Проверяем что такой файл есть в ФС
             if (hFile.isDirectory()) { // Если это директория, то рекурсивно пробегаемся по всем ее файлам и поддиректориям

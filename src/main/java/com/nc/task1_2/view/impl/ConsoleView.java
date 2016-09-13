@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Created by ilpr0816 on 18.08.2016.
  * Реализация интерфейса View для консоли
  */
-public class ConsoleView implements View{
+public class ConsoleView implements View {
     /**
      * Значения команд в консоли
      */

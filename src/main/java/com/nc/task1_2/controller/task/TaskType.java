@@ -1,8 +1,9 @@
 package com.nc.task1_2.controller.task;
 
+import com.nc.task1_2.controller.ViewObservable;
 import com.nc.task1_2.controller.action.Action;
 import com.nc.task1_2.controller.action.impl.*;
-import com.nc.task1_2.controller.event.Event;
+import com.nc.task1_2.controller.dao.FileDAO;
 import com.nc.task1_2.controller.exception.AbstractException;
 import com.nc.task1_2.controller.exception.ControllerException;
 
@@ -32,9 +33,9 @@ public enum TaskType {
         this.action = action;
     }
 
-    public Event make(Task task) throws ControllerException, AbstractException {
+    public void make(Task task, FileDAO dbDAO, FileDAO fsDAO, ViewObservable observable) throws ControllerException, AbstractException {
         try {
-            return action.newInstance().doAction(task);
+            action.newInstance().doAction(task, dbDAO, fsDAO, observable);
         } catch (ReflectiveOperationException e) {
             throw new ControllerException("Не удалось запустить действие " + actionCode, null); //TODO верный path
         }

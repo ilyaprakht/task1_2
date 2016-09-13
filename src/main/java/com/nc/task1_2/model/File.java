@@ -16,6 +16,11 @@ public class File implements Cloneable{
     private Folder parentFolder;
 
     /**
+     * ID файла в БД
+     */
+    private int id;
+
+    /**
      * Конструктор
      * @param fileName - строка пути к файлу
      */
@@ -69,8 +74,28 @@ public class File implements Cloneable{
         }
     }
 
+    /**
+     * Клонирование
+     * @return склонированный объект
+     */
     @Override
     public File clone() {
         return new File(getFileName(), getParentFolder());
+    }
+
+    /**
+     * Геттер для id
+     * @return id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Сеттер для id
+     * @param id - id
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 }

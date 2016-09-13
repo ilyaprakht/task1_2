@@ -25,14 +25,6 @@ public class Event {
     /**
      * Конструктор
      * @param eventType - тип события
-     */
-    Event(EventType eventType) {
-        this.eventType = eventType;
-    }
-
-    /**
-     * Конструктор
-     * @param eventType - тип события
      * @param message - сообщение
      */
     public Event(EventType eventType, String message) {
@@ -81,7 +73,7 @@ public class Event {
 
     /**
      * Геттер для типа команды
-     * @return
+     * @return тип операции
      */
     public TaskType getTaskType() {
         return taskType;
