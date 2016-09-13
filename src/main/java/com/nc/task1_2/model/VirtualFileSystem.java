@@ -1,10 +1,6 @@
-package com.nc.task1_2.controller;
+package com.nc.task1_2.model;
 
 import com.nc.task1_2.controller.exception.ControllerException;
-import com.nc.task1_2.model.File;
-import com.nc.task1_2.model.Folder;
-import com.nc.task1_2.model.PairFiles;
-import com.nc.task1_2.model.Path;
 
 /**
  * Created by ilpr0816 on 17.08.2016.
@@ -17,10 +13,29 @@ public class VirtualFileSystem {
     private File headFile;
 
     /**
+     * Синглтон объект
+     */
+    private static VirtualFileSystem virtualFileSystem;
+
+    /**
      * Конструктор
+     */
+    private VirtualFileSystem() {
+        this.headFile = null;
+    }
+
+    public static VirtualFileSystem getInstance() {
+        if (virtualFileSystem == null) {
+            virtualFileSystem = new VirtualFileSystem();
+        }
+        return virtualFileSystem;
+    }
+
+    /**
+     * Сеттер для головного файла
      * @param headFile - головной файл
      */
-    public VirtualFileSystem(File headFile) {
+    public void setHeadFile(File headFile) {
         this.headFile = headFile;
     }
 

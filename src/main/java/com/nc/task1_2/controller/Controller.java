@@ -2,9 +2,11 @@ package com.nc.task1_2.controller;
 
 import com.nc.task1_2.controller.event.Event;
 import com.nc.task1_2.controller.event.EventType;
+import com.nc.task1_2.controller.exception.ControllerException;
+import com.nc.task1_2.controller.exception.DataBaseException;
+import com.nc.task1_2.controller.exception.FileSystemException;
 import com.nc.task1_2.controller.task.Task;
 import com.nc.task1_2.controller.task.TaskType;
-import com.nc.task1_2.controller.task.ViewObservable;
 import com.nc.task1_2.view.View;
 import com.nc.task1_2.view.ViewObserver;
 
@@ -13,9 +15,9 @@ import java.util.List;
 
 /**
  * Created by ilpr0816 on 18.08.2016.
- * Основной контроллер команды от представления
+ * Основной контроллер команды от представления. Можно запускать в отдельном потоке
  */
-public class Controller implements ViewObservable{
+public class Controller implements ViewObservable, Runnable {
     /**
      * Экземпляр представления
      */
@@ -34,6 +36,7 @@ public class Controller implements ViewObservable{
     /**
      * Основной метод работы контроллера
      */
+    @Override
     public void run() {
         // Инциализируем команду
         Task task;
@@ -43,30 +46,9 @@ public class Controller implements ViewObservable{
             task = view.read();
 
             try {
-                // Определение соответствующего поведения в зависимости от команды
-                switch (task.getTaskType()) {
-                    case SCAN:
-
-                        break;
-                    case MOVE:
-
-                        break;
-                    case COPY:
-
-                        break;
-                    case REMOVE:
-
-                        break;
-                    case PRINT:
-
-                        break;
-                    case EXIT:
-                        Event event = new Event(EventType.TASK_DONE, TaskType.EXIT);
-                        //TODO отправка евента
-                        break;
-                }
+                Event event = task.getTaskType().make(task);
+                notifyObservers(event);
             }
-            /* закоментил, пока не реализована логика
             catch (FileSystemException e) { //Ошибка файловой системы
                 Event event = new Event(EventType.ERROR, task.getTaskType(), "file system error: " + e.getMessage() + " " + (e.getFile() == null ? "" : " " + e.getFile().getFullPath()));
                 notifyObservers(event);
@@ -75,7 +57,10 @@ public class Controller implements ViewObservable{
                 Event event = new Event(EventType.ERROR, task.getTaskType(), "database error: " + e.getMessage() + " " + (e.getFile() == null ? "" : " " + e.getFile().getFullPath()));
                 notifyObservers(event);
             }
-            */
+            catch (ControllerException e) { // Ошибка в контроллере
+                Event event = new Event(EventType.ERROR, task.getTaskType(), "controller error: " + e.getMessage() + " " + (e.getPath() == null ? "" : " " + e.getPath().getFullPath()));
+                notifyObservers(event);
+            }
             catch (Exception e) { // Не ожидаемая ошибка
                 Event event = new Event(EventType.ERROR, task.getTaskType(), "unknown error. exit program: " + e.getMessage());
                 notifyObservers(event);

@@ -1,4 +1,4 @@
-package com.nc.task1_2.controller.task;
+package com.nc.task1_2.controller;
 
 import com.nc.task1_2.controller.event.Event;
 import com.nc.task1_2.view.ViewObserver;
